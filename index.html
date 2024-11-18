@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Friday!</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #FFD700, #FF69B4);
+            text-align: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 10px;
+        }
+
+        .title {
+            font-size: min(2.5em, 8vw);
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            animation: bounce 1s ease infinite;
+            margin: 0;
+            padding: 20px 0;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .button-container {
+            position: relative;
+            width: 100%;
+            padding: 10px;
+            z-index: 10;
+        }
+
+        .big-button {
+            padding: min(25px, 4vw) min(50px, 8vw);
+            font-size: min(28px, 5vw);
+            background: linear-gradient(45deg, #ff4444, #ff6b6b);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: visible;
+            white-space: nowrap;
+            width: auto;
+            min-width: 200px;
+            z-index: 100;
+        }
+
+        .big-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: 0.5s;
+            z-index: 1;
+        }
+
+        .big-button:hover {
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .big-button:hover:before {
+            left: 100%;
+        }
+
+        .result-container {
+            width: 100%;
+            max-width: min(600px, 90vw);
+            padding: min(30px, 4vw);
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: none;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+            display: block;
+        }
+
+        .result-image {
+            width: 100%;
+            max-width: min(500px, 80vw);
+            height: auto;
+            border-radius: 15px;
+            margin: 10px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .result-image:hover {
+            transform: scale(1);
+        }
+
+        .quote {
+            font-size: min(22px, 4.5vw);
+            color: #333;
+            line-height: 1.6;
+            white-space: pre-line;
+            position: relative;
+            padding: min(20px, 4vw);
+            margin: 0;
+        }
+
+        .quote:before, .quote:after {
+            content: '"';
+            font-size: min(60px, 10vw);
+            color: rgba(255, 105, 180, 0.2);
+            position: absolute;
+        }
+
+        .quote:before {
+            top: -10px;
+            left: -10px;
+        }
+
+        .quote:after {
+            bottom: -40px;
+            right: -10px;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .emoji {
+            font-size: min(40px, 8vw);
+            animation: float 3s ease-in-out infinite;
+            margin: 10px;
+            display: inline-block;
+        }
+
+        @media (max-height: 700px) {
+            .container {
+                gap: 10px;
+            }
+            
+            .title {
+                padding: 10px 0;
+            }
+
+            .result-container {
+                padding: 15px;
+            }
+
+            .quote {
+                padding: 10px;
+            }
+
+            .emoji {
+                margin: 5px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .big-button {
+                padding: 15px 30px;
+                font-size: 20px;
+            }
+
+            .result-container {
+                padding: 15px;
+            }
+
+            .quote:before, .quote:after {
+                font-size: 40px;
+            }
+        }
+
+        canvas {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">✨ Friday Fun Time! ✨</h1>
+        <div class="button-container">
+            <button class="big-button">🎉 If You Dare, Press This Button! 🎉</button>
+        </div>
+        <div class="result-container">
+            <img class="result-image" alt="Friday mood">
+            <p class="quote"></p>
+            <div class="emoji-container">
+                <span class="emoji">🎈</span>
+                <span class="emoji">🌟</span>
+                <span class="emoji">🎊</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const content = [
+            {
+                image: 'image1.webp',
+                quote: `"It's Friday, my friend! 
+Time to tell Monday to get lost 
+and let the weekend be our boss! 🎉"`
+            },
+            {
+                image: 'image2.webp',
+                quote: `"Knock knock!
+Who's there?
+FRI!
+FRI who?
+FRI-nally the weekend! 
+Happy Friday! ✨"`
+            },
+            {
+                image: 'image3.webp',
+                quote: `"Roses are red,
+Coffee is brown,
+It's finally Friday,
+No need to frown! ☕"`
+            },
+            {
+                image: 'image4.webp',
+                quote: `"Congratulations!
+You've successfully made it through another week of pretending to be a responsible adult.
+Happy Friday! 🌟"`
+            }
+        ];
+
+        const button = document.querySelector('.big-button');
+        const resultContainer = document.querySelector('.result-container');
+        const resultImage = document.querySelector('.result-image');
+        const quoteText = document.querySelector('.quote');
+
+        function triggerConfetti() {
+            const colors = ['#ff69b4', '#ffd700', '#ff4444', '#00ff00'];
+            
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: colors,
+                startVelocity: 30,
+                gravity: 0.8,
+                ticks: 300,
+                shapes: ['circle', 'square'],
+                zIndex: 1000
+            });
+
+            setTimeout(() => {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: colors,
+                    startVelocity: 25,
+                    gravity: 0.7,
+                    ticks: 200
+                });
+            }, 250);
+        }
+
+        function showRandomContent() {
+            const randomIndex = Math.floor(Math.random() * content.length);
+            const item = content[randomIndex];
+            
+            resultImage.src = item.image;
+            quoteText.textContent = item.quote;
+            
+            resultContainer.style.display = 'block';
+            // Force reflow
+            void resultContainer.offsetWidth;
+            resultContainer.classList.add('visible');
+            
+            triggerConfetti();
+
+            // Smooth scroll to show all content
+            setTimeout(() => {
+                resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 300);
+        }
+
+        button.addEventListener('click', () => {
+            resultContainer.classList.remove('visible');
+            setTimeout(showRandomContent, 300);
+        });
+    </script>
+</body>
+</html>
