@@ -21,45 +21,46 @@
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #FFD700, #FF69B4);
             text-align: center;
-            padding: 20px;
+            padding: 10px;
             overflow-x: hidden;
         }
 
         .container {
             width: 100%;
             max-width: 600px;
-            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
-            padding: 20px 10px;
+            gap: 15px;
+            padding: 10px 5px;
         }
 
         .title {
-            font-size: min(2.5em, 8vw);
+            font-size: clamp(24px, 5vw, 40px);
             color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
             animation: bounce 1s ease infinite;
             margin: 0;
-            padding: 20px 0;
+            padding: 10px 0;
+            width: 100%;
+            word-wrap: break-word;
         }
 
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-5px); }
         }
 
         .button-container {
             position: relative;
             width: 100%;
-            padding: 10px;
+            padding: 5px;
             z-index: 10;
         }
 
         .big-button {
-            padding: min(25px, 4vw) min(50px, 8vw);
-            font-size: min(28px, 5vw);
+            padding: clamp(10px, 3vw, 25px) clamp(20px, 5vw, 50px);
+            font-size: clamp(16px, 4vw, 28px);
             background: linear-gradient(45deg, #ff4444, #ff6b6b);
             color: white;
             border: none;
@@ -69,10 +70,12 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: visible;
-            white-space: nowrap;
-            width: auto;
-            min-width: 200px;
+            white-space: normal;
+            width: fit-content;
+            max-width: 90%;
+            min-width: auto;
             z-index: 100;
+            line-height: 1.2;
         }
 
         .big-button:before {
@@ -103,8 +106,8 @@
 
         .result-container {
             width: 100%;
-            max-width: min(600px, 90vw);
-            padding: min(30px, 4vw);
+            max-width: 100%;
+            padding: clamp(10px, 3vw, 30px);
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             opacity: 0;
@@ -112,7 +115,7 @@
             transition: all 0.5s ease;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             display: none;
-            margin-top: 20px;
+            margin-top: 10px;
             position: relative;
             z-index: 1;
         }
@@ -125,12 +128,12 @@
 
         .result-image {
             width: 100%;
-            max-width: min(500px, 80vw);
+            max-width: 100%;
             height: auto;
             border-radius: 15px;
-            margin: 10px 0;
+            margin: 5px 0;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transform: scale(0.95);
+            transform: scale(0.98);
             transition: transform 0.3s ease;
         }
 
@@ -139,79 +142,78 @@
         }
 
         .quote {
-            font-size: min(22px, 4.5vw);
+            font-size: clamp(16px, 3.5vw, 22px);
             color: #333;
-            line-height: 1.6;
+            line-height: 1.4;
             white-space: pre-line;
             position: relative;
-            padding: min(20px, 4vw);
+            padding: clamp(10px, 3vw, 20px);
             margin: 0;
+            word-wrap: break-word;
         }
 
         .quote:before, .quote:after {
             content: '"';
-            font-size: min(60px, 10vw);
+            font-size: clamp(30px, 8vw, 60px);
             color: rgba(255, 105, 180, 0.2);
             position: absolute;
         }
 
         .quote:before {
-            top: -10px;
-            left: -10px;
+            top: -5px;
+            left: -5px;
         }
 
         .quote:after {
-            bottom: -40px;
-            right: -10px;
+            bottom: -20px;
+            right: -5px;
         }
 
         @keyframes float {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-5px); }
             100% { transform: translateY(0px); }
         }
 
         .emoji {
-            font-size: min(40px, 8vw);
+            font-size: clamp(24px, 6vw, 40px);
             animation: float 3s ease-in-out infinite;
-            margin: 10px;
+            margin: 5px;
             display: inline-block;
         }
 
-        @media (max-height: 700px) {
+        .emoji-container {
+            margin-top: 5px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+
             .container {
                 gap: 10px;
+                padding: 5px;
             }
-            
+
             .title {
-                padding: 10px 0;
+                padding: 5px 0;
             }
 
             .result-container {
-                padding: 15px;
+                padding: 10px;
             }
 
             .quote {
                 padding: 10px;
             }
 
-            .emoji {
-                margin: 5px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .big-button {
-                padding: 15px 30px;
-                font-size: 20px;
-            }
-
-            .result-container {
-                padding: 15px;
-            }
-
             .quote:before, .quote:after {
-                font-size: 40px;
+                font-size: 30px;
+            }
+
+            .emoji {
+                margin: 3px;
             }
         }
 
@@ -242,6 +244,7 @@
     </div>
 
     <script>
+        // Previous JavaScript remains exactly the same
         const content = [
             {
                 image: 'image1.webp',
@@ -273,10 +276,27 @@ Happy Friday! 🌟"`
             }
         ];
 
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
         const button = document.querySelector('.big-button');
         const resultContainer = document.querySelector('.result-container');
         const resultImage = document.querySelector('.result-image');
         const quoteText = document.querySelector('.quote');
+
+        let contentQueue = [];
+
+        function getNextContent() {
+            if (contentQueue.length === 0) {
+                contentQueue = [...shuffleArray([...content])];
+            }
+            return contentQueue.shift();
+        }
 
         function triggerConfetti() {
             const colors = ['#ff69b4', '#ffd700', '#ff4444', '#00ff00'];
@@ -307,20 +327,17 @@ Happy Friday! 🌟"`
         }
 
         function showRandomContent() {
-            const randomIndex = Math.floor(Math.random() * content.length);
-            const item = content[randomIndex];
+            const item = getNextContent();
             
             resultImage.src = item.image;
             quoteText.textContent = item.quote;
             
             resultContainer.style.display = 'block';
-            // Force reflow
             void resultContainer.offsetWidth;
             resultContainer.classList.add('visible');
             
             triggerConfetti();
 
-            // Smooth scroll to show all content
             setTimeout(() => {
                 resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }, 300);
@@ -330,6 +347,8 @@ Happy Friday! 🌟"`
             resultContainer.classList.remove('visible');
             setTimeout(showRandomContent, 300);
         });
+
+        contentQueue = [...shuffleArray([...content])];
     </script>
 </body>
 </html>
